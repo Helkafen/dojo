@@ -12,6 +12,7 @@ class Collections extends FunSuite with TypeCheckedTripleEquals {
 
   // See https://stackoverflow.com/questions/3634023/should-i-use-lista-or-seqa-or-something-else
   // Beaucoup des methodes utilisees ici sont communes a Traversable
+  // http://docs.scala-lang.org/overviews/collections/trait-traversable.html
 
   // Bonne habitude: La signature la plus generale est generalement la meilleure (Seq vs List)
 
@@ -74,12 +75,6 @@ class Collections extends FunSuite with TypeCheckedTripleEquals {
     val stream: Stream[Int] = list.???
   }
 
-  test("streams") {
-    val stream = (1 to 10).toStream // Stream = Infinite List with lazy evaluation
-
-    assert(stream.??? === List(1,2), "take the two first elements")
-    assert(stream.??? === List(1,2), "take while i < 3")
-  }
 
   test("Turn a list into a dictionnary") {
     case class Person(id: Int, name: String)
@@ -114,20 +109,6 @@ class Collections extends FunSuite with TypeCheckedTripleEquals {
   }
 
 
-  test("Distribute a map over several CPUs") {
-    val list = List(1,2,3,4)
-    def plus1(x: Int): Int = x + 1
-
-    // Warning: Use parallel collections only for independent stuff
-    assert(list.??? == list.map(plus1), "executing in parallel does not change the result")
-
-    // Parallelism can be configured
-    val p = list.par
-    p.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(2)) // A pool of 2 executors
-    assert(p.map(plus1) == list.map(plus1), "executing in parallel does not change the result")
-  }
-
-
   // Folding
   // NB: The state in event sourcing is a foldLeft of the stream of events
   test("folding lists") {
@@ -152,6 +133,28 @@ class Collections extends FunSuite with TypeCheckedTripleEquals {
     val set3: Set[Int] = (3 to 12).toSet
     val listOfSets: List[Set[Int]] = List(set1, set2, set3)
     assert(listOfSets.??? === (1 to 12).toSet)
+  }
+
+
+  test("streams") {
+    val stream = (1 to 10).toStream // Stream = Infinite List with lazy evaluation
+
+    assert(stream.??? === List(1,2), "take the two first elements")
+    assert(stream.??? === List(1,2), "take while i < 3")
+  }
+
+
+  test("Distribute a map over several CPUs") {
+    val list = List(1,2,3,4)
+    def plus1(x: Int): Int = x + 1
+
+    // Warning: Use parallel collections only for independent stuff
+    assert(list.??? == list.map(plus1), "executing in parallel does not change the result")
+
+    // Parallelism can be configured
+    val p = list.par
+    p.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(2)) // A pool of 2 executors
+    assert(p.map(plus1) == list.map(plus1), "executing in parallel does not change the result")
   }
 
 
