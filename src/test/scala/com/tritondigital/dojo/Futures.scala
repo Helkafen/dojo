@@ -155,6 +155,11 @@ class Futures extends FunSuite with ScalaFutures with Matchers with TypeCheckedT
     f.???
   }
 
+  test("Try a future 3 times") {
+    val f = fut(1)
+    f.fallbackTo(f).fallbackTo(f)
+  }
+
 
   // We're transforming a Seq[Future[A]] into a Future[Seq[A]]
   // Someday you may read that type signature and think "ok, so Future is also an Applicative!"
