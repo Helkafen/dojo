@@ -12,6 +12,15 @@ import org.scalacheck.Arbitrary
 import scala.io.Source
 
 
+/*
+  This dojo covers:
+  - Scalatest styles
+  - Scalatest matchers
+  - Basics of scalacheck
+  - Use of Fixtures
+ */
+
+
 case class Name(value: String) extends AnyVal
 
 case class NamePair(name1: Name, name2: Name)
