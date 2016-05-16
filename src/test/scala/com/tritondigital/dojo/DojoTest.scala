@@ -37,6 +37,10 @@ object Dummy {
 // Tell sbt to run tests sequentially, but in another jvm: "fork in Test := true"
 // Tell sbt to only run the failing tests: "test-quick"
 
+// For the different test styles, see http://www.scalatest.org/user_guide/selecting_a_style
+// More advice at the end of this file
+
+// FunSuite is nice to test pure functions
 class DojoTest1 extends FunSuite with Matchers with TypeCheckedTripleEquals with PropertyChecks {
 
   /*
@@ -129,6 +133,7 @@ Use a FixtureParam case class to pass the state around.
 
 This example is inspired by WCM2Feature in wcm2-datamart
 */
+// FeatureSpec is nice when a test needs to have some state ready
 /*class DojoTest5 extends fixture.FeatureSpec with Matchers {
 
   case class FixtureParam(directory: Path)
@@ -144,6 +149,29 @@ This example is inspired by WCM2Feature in wcm2-datamart
   }
 
 }*/
+
+/*
+  So we just used FunSuite for pure tests, and FeatureSpec for stateful tests.
+
+  On other testing styles:
+  - FlatSpec is almost the same as FunSuite
+  - WordSpec/SetSpec/FreeSpec work too, but I've seen them misused quite a lot (with names of
+    classes or methods in the descriptions). They are hierarchical.
+
+    Example of misuse:
+    "A CountyEnrichmentHelper" when {
+      "applied" should {
+         "create a data frame with one county information" {
+    This could have been a test("Create a dataframe with county information").
+
+    However they can be nice if there are many test cases and when they are easy to categorize.
+
+    Example of better use:
+    "A Station" when {
+      "merged on mounts" should {
+        "yield a new station object containing its mounts and the mounts of the other station" in {
+    The descriptions have business meaning!
+ */
 
 
 /*
