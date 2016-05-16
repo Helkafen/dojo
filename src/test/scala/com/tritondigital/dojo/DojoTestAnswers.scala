@@ -11,7 +11,7 @@ import org.scalacheck.Arbitrary
 
 import scala.io.Source
 
-
+/*
 case class Name(value: String) extends AnyVal
 
 case class NamePair(name1: Name, name2: Name)
@@ -178,3 +178,4 @@ class DojoTest5 extends fixture.FeatureSpec with Matchers {
   }
 
 }
+*/
